@@ -10,11 +10,11 @@ fi
 IP="$1"
 echo "backup remarkable at $IP"
 
-SSHPASS=
+CMD_PREFIX=()
 if [ $# -gt 1 ]; then
-    echo "Note: passing the password via commandline is unsafe - you should rather use a SSH key." 
     PASSWD="$2"
-    SSHPASS="sshpass -p $PASSWD"
+    export SSHPASS="$PASSWD"
+    CMD_PREFIX=(sshpass -e)
 fi
 
 TARGET_FOLDER="files"
@@ -27,11 +27,13 @@ ping -W 1 -c 1 $IP >/dev/null 2>&1 || (echo "failed" && exit 1)
 echo ok
 
 echo "backup documents..."
-$($SSHPASS scp -r root@$IP:/home/root/.local/share/remarkable/xochitl/ ./files/)
+cmd=("${CMD_PREFIX[@]}" scp -r root@$IP:/home/root/.local/share/remarkable/xochitl/ ./files/)
+"${cmd[@]}"
 echo ok
 
 echo "backup config..."
-$($SSHPASS scp -r root@$IP:/home/root/.config/remarkable/xochitl.conf .)
+cmd=("${CMD_PREFIX[@]}" scp -r root@$IP:/home/root/.config/remarkable/xochitl.conf .)
+"${cmd[@]}"
 echo ok
 
 echo "backup complete"
