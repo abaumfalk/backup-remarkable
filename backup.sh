@@ -9,6 +9,10 @@ fi
 
 IP="$1"
 echo "backup remarkable at $IP"
+if [ -e files ]; then
+    echo -n "before: "
+    du -hs files
+fi
 
 CMD_PREFIX=()
 if [ $# -gt 1 ]; then
@@ -36,4 +40,5 @@ cmd=("${CMD_PREFIX[@]}" scp -r root@$IP:/home/root/.config/remarkable/xochitl.co
 "${cmd[@]}"
 echo ok
 
-echo "backup complete"
+echo -n "backup complete: "
+du -hs files
