@@ -22,7 +22,7 @@ rm -rf "$TARGET_FOLDER"
 mkdir "$TARGET_FOLDER"
 
 echo
-echo -n "check connection... "
+echo "check connection..."
 ping -W 1 -c 1 $IP >/dev/null 2>&1 || (echo "failed" && exit 1)
 echo ok
 
@@ -33,3 +33,5 @@ echo ok
 echo "backup config..."
 $($SSHPASS scp -r root@$IP:/home/root/.config/remarkable/xochitl.conf .)
 echo ok
+
+echo "backup complete"
